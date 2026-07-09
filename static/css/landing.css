@@ -1,0 +1,209 @@
+/* ------------------------------------------------------------------ */
+/* Hero — centered single-column layout                                */
+/* ------------------------------------------------------------------ */
+
+.hero {
+    display: block;
+    text-align: center;
+    padding: 4rem 2rem 3rem;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+/* Badge */
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #e6f4ec;
+    color: #2d6a4f;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    margin-bottom: 2rem;
+    border: 1px solid #b7dfc5;
+}
+
+.hero-badge-dot {
+    width: 7px;
+    height: 7px;
+    background: #4caf7d;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Title */
+.hero-title {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(3rem, 6vw, 4.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+}
+
+.hero-title-green {
+    display: block;
+    color: #2e7d52;
+}
+
+/* Subtitle */
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+}
+
+/* Buttons */
+.hero-actions {
+    justify-content: center;
+    margin-bottom: 3.5rem;
+    gap: 1rem;
+}
+
+.btn-hero {
+    padding: 0.8rem 1.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Dashboard mock                                                       */
+/* ------------------------------------------------------------------ */
+
+.hero-dashboard {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.dashboard-window {
+    background: #f0ede6;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0ddd6;
+}
+
+.dashboard-titlebar {
+    background: #e8e5de;
+    padding: 0.7rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-bottom: 1px solid #d8d5ce;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.dot-red    { background: #ff5f57; }
+.dot-yellow { background: #febc2e; }
+.dot-green  { background: #28c840; }
+
+.dashboard-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Stat tiles */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.stat-tile {
+    background: #ffffff;
+    border: 1px solid #e8e5de;
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    text-align: left;
+}
+
+.stat-label {
+    font-size: 0.78rem;
+    color: #999;
+    font-weight: 400;
+}
+
+.stat-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    font-family: var(--font-body);
+}
+
+.stat-change {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.stat-change--bad     { color: #e53935; }
+.stat-change--good    { color: #2e7d52; }
+.stat-change--neutral { color: #aaa; font-weight: 400; }
+
+/* Progress bars */
+.dashboard-bars {
+    background: #ffffff;
+    border: 1px solid #e8e5de;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.db-bar-row {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    align-items: center;
+    gap: 1rem;
+}
+
+.db-cat {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    font-weight: 400;
+    text-align: right;
+}
+
+.db-bar-track {
+    height: 8px;
+    background: #ebe8e1;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.db-bar {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.db-bar--orange { background: #e8a020; }
+.db-bar--blue   { background: #4a90d9; }
+.db-bar--purple { background: #6b5bbd; }
+
+/* ------------------------------------------------------------------ */
+/* Responsive                                                           */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 600px) {
+    .dashboard-stats { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; align-items: center; }
+}
