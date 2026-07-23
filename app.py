@@ -1,6 +1,7 @@
 import sqlite3
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, abort
 from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
+from database.queries import get_user_by_id, get_summary_stats, get_recent_transactions, get_category_breakdown
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -96,37 +97,16 @@ def logout():
 def profile():
     if not session.get("user_id"):
         return redirect(url_for("login"))
+    uid = session["user_id"]
 
-    user = {
-        "name":         "Alex Morgan",
-        "email":        "alex@example.com",
-        "initials":     "AM",
-        "member_since": "March 2024",
-    }
+    user = get_user_by_id(uid)
+    if user is None:
+        abort(404)
+    stats = get_summary_stats(uid)
 
-    stats = {
-        "total_spent":  "₹5,310",
-        "transactions": 8,
-        "top_category": "Bills",
-    }
+    expenses = get_recent_transactions(uid)
 
-    expenses = [
-        {"date": "16 Jul 2026", "description": "Dinner with friends", "category": "Food",          "amount": "₹750.00"},
-        {"date": "14 Jul 2026", "description": "Miscellaneous",       "category": "Other",         "amount": "₹200.00"},
-        {"date": "12 Jul 2026", "description": "Grocery run",         "category": "Shopping",      "amount": "₹950.00"},
-        {"date": "10 Jul 2026", "description": "Movie tickets",       "category": "Entertainment", "amount": "₹600.00"},
-        {"date": "08 Jul 2026", "description": "Pharmacy purchase",   "category": "Health",        "amount": "₹340.00"},
-    ]
-
-    categories = [
-        {"name": "Bills",         "amount": "₹1,850", "percent": 100},
-        {"name": "Shopping",      "amount": "₹950",   "percent": 51},
-        {"name": "Food",          "amount": "₹870",   "percent": 47},
-        {"name": "Entertainment", "amount": "₹600",   "percent": 32},
-        {"name": "Transport",     "amount": "₹500",   "percent": 27},
-        {"name": "Health",        "amount": "₹340",   "percent": 18},
-        {"name": "Other",         "amount": "₹200",   "percent": 11},
-    ]
+    categories = get_category_breakdown(uid)
 
     return render_template("profile.html",
                            user=user,
