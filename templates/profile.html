@@ -6,12 +6,47 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 {% endblock %}
 
+{% macro period_label(active_period, start_date, end_date) %}
+{% if active_period != 'all' %}
+<p class="filter-active-label">
+    <i data-lucide="calendar"></i>
+    {% if active_period == 'custom' %}{{ start_date or 'start' }} – {{ end_date or 'today' }}
+    {% elif active_period == 'last-7' %}Last 7 days
+    {% elif active_period == 'last-30' %}Last 30 days
+    {% elif active_period == 'this-month' %}This month
+    {% elif active_period == 'last-month' %}Last month{% endif %}
+</p>
+{% endif %}
+{% endmacro %}
+
 {% block content %}
 
 <section class="profile-section">
     <div class="profile-inner">
 
         <h1 class="profile-page-title">My Profile</h1>
+
+        <!-- Date filter bar -->
+        <div class="filter-bar">
+            <div class="filter-presets">
+                {% for slug, label in [('all','All time'),('last-7','Last 7 days'),
+                                       ('last-30','Last 30 days'),('this-month','This month'),
+                                       ('last-month','Last month')] %}
+                <a href="{{ url_for('profile') }}?period={{ slug }}"
+                   class="filter-btn{% if active_period == slug %} filter-btn--active{% endif %}">
+                    {{ label }}
+                </a>
+                {% endfor %}
+            </div>
+            <form class="filter-custom" method="GET" action="{{ url_for('profile') }}">
+                <input type="date" name="start_date" class="form-input filter-date-input"
+                       value="{{ start_date }}" aria-label="From date">
+                <span class="filter-date-sep">–</span>
+                <input type="date" name="end_date" class="form-input filter-date-input"
+                       value="{{ end_date }}" aria-label="To date">
+                <button type="submit" class="btn-primary filter-apply-btn">Apply</button>
+            </form>
+        </div>
 
         <!-- User info card -->
         <div class="profile-card">
@@ -62,6 +97,7 @@
                     <i data-lucide="list"></i>
                     Recent Transactions
                 </h2>
+                {{ period_label(active_period, start_date, end_date) }}
                 <div class="table-scroll">
                     <table class="expense-table">
                         <thead>
@@ -94,6 +130,7 @@
                     <i data-lucide="pie-chart"></i>
                     Category Breakdown
                 </h2>
+                {{ period_label(active_period, start_date, end_date) }}
                 {% for c in categories %}
                 <div class="breakdown-row">
                     <div class="breakdown-meta">
@@ -101,7 +138,7 @@
                         <span class="breakdown-amount">{{ c.amount }}</span>
                     </div>
                     <div class="breakdown-bar-track">
-                        <div class="breakdown-bar" style="width: {{ c.percent }}%"></div>
+                        <div class="breakdown-bar" style="width: {{ c.pct }}%"></div>
                     </div>
                 </div>
                 {% endfor %}
