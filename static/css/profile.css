@@ -270,6 +270,92 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Date filter bar                                                     */
+/* ------------------------------------------------------------------ */
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+}
+
+.filter-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.filter-btn {
+    display: inline-block;
+    padding: 0.35rem 0.875rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    border: 1px solid var(--border);
+    background: transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.filter-btn:hover {
+    border-color: var(--ink-soft);
+    color: var(--ink);
+}
+
+.filter-btn--active,
+.filter-btn--active:hover {
+    background: var(--accent);
+    color: var(--paper);
+    border-color: var(--accent);
+}
+
+.filter-custom {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.filter-date-input {
+    width: 8.5rem;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.85rem;
+}
+
+.filter-date-sep {
+    color: var(--ink-faint);
+    font-size: 0.9rem;
+}
+
+.filter-apply-btn {
+    padding: 0.35rem 0.875rem;
+    font-size: 0.85rem;
+}
+
+.filter-active-label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    margin-top: -0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.filter-active-label svg {
+    width: 13px;
+    height: 13px;
+    color: var(--ink-faint);
+}
+
+/* ------------------------------------------------------------------ */
 /* Responsive                                                          */
 /* ------------------------------------------------------------------ */
 
@@ -286,5 +372,20 @@
 
     .profile-section {
         padding: 2rem 1rem;
+    }
+
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0.875rem 1rem;
+    }
+
+    .filter-custom {
+        flex-wrap: wrap;
+    }
+
+    .filter-date-input,
+    .filter-apply-btn {
+        width: 100%;
     }
 }

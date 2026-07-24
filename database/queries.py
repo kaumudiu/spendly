@@ -2,6 +2,19 @@ from database.db import get_db
 from datetime import datetime
 
 
+def _date_filter_clause(start_date, end_date):
+    # Returns (sql_fragment, params_tuple). The fragment uses a leading AND,
+    # so callers must already have a WHERE clause (e.g. "WHERE user_id = ?").
+    clauses, params = [], []
+    if start_date:
+        clauses.append("AND date >= ?")
+        params.append(start_date)
+    if end_date:
+        clauses.append("AND date <= ?")
+        params.append(end_date)
+    return " ".join(clauses), tuple(params)
+
+
 def get_user_by_id(user_id):
     db = get_db()
     try:
@@ -27,17 +40,18 @@ def get_user_by_id(user_id):
     }
 
 
-def get_summary_stats(user_id):
+def get_summary_stats(user_id, start_date=None, end_date=None):
+    date_sql, date_params = _date_filter_clause(start_date, end_date)
     db = get_db()
     try:
         totals_row = db.execute(
-            "SELECT SUM(amount) as total, COUNT(*) as count FROM expenses WHERE user_id = ?",
-            (user_id,),
+            "SELECT SUM(amount) as total, COUNT(*) as count FROM expenses WHERE user_id = ? " + date_sql,
+            (user_id,) + date_params,
         ).fetchone()
         category_row = db.execute(
-            "SELECT category FROM expenses WHERE user_id = ?"
-            " GROUP BY category ORDER BY SUM(amount) DESC LIMIT 1",
-            (user_id,),
+            "SELECT category FROM expenses WHERE user_id = ? " + date_sql
+            + " GROUP BY category ORDER BY SUM(amount) DESC LIMIT 1",
+            (user_id,) + date_params,
         ).fetchone()
     finally:
         db.close()
@@ -52,13 +66,14 @@ def get_summary_stats(user_id):
     }
 
 
-def get_recent_transactions(user_id, limit=10):
+def get_recent_transactions(user_id, limit=10, start_date=None, end_date=None):
+    date_sql, date_params = _date_filter_clause(start_date, end_date)
     conn = get_db()
     try:
         rows = conn.execute(
             "SELECT date, description, category, amount FROM expenses"
-            " WHERE user_id = ? ORDER BY date DESC LIMIT ?",
-            (user_id, limit),
+            " WHERE user_id = ? " + date_sql + " ORDER BY date DESC LIMIT ?",
+            (user_id,) + date_params + (limit,),
         ).fetchall()
     finally:
         conn.close()
@@ -73,13 +88,14 @@ def get_recent_transactions(user_id, limit=10):
     ]
 
 
-def get_category_breakdown(user_id):
+def get_category_breakdown(user_id, start_date=None, end_date=None):
+    date_sql, date_params = _date_filter_clause(start_date, end_date)
     db = get_db()
     try:
         rows = db.execute(
             "SELECT category, SUM(amount) as total FROM expenses"
-            " WHERE user_id = ? GROUP BY category ORDER BY total DESC",
-            (user_id,),
+            " WHERE user_id = ? " + date_sql + " GROUP BY category ORDER BY total DESC",
+            (user_id,) + date_params,
         ).fetchall()
     finally:
         db.close()
